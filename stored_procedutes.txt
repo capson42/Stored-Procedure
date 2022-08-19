@@ -1,0 +1,66 @@
+USE [Company]
+GO
+/****** Object:  Table [dbo].[Student]    Script Date: 8/19/2022 7:47:26 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Student](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+	[Rollno] [numeric](3, 0) NOT NULL,
+	[Address] [text] NOT NULL,
+	[State] [varchar](50) NOT NULL,
+	[DOB] [date] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[Student] ON 
+GO
+INSERT [dbo].[Student] ([ID], [Name], [Rollno], [Address], [State], [DOB]) VALUES (1, N'Capson', CAST(42 AS Numeric(3, 0)), N'Vikhroli', N'Maharastra', CAST(N'1998-01-01' AS Date))
+GO
+INSERT [dbo].[Student] ([ID], [Name], [Rollno], [Address], [State], [DOB]) VALUES (2, N'Leander', CAST(12 AS Numeric(3, 0)), N'Parksite', N'Goa', CAST(N'1999-01-01' AS Date))
+GO
+SET IDENTITY_INSERT [dbo].[Student] OFF
+GO
+/****** Object:  StoredProcedure [dbo].[sp_student]    Script Date: 8/19/2022 7:47:26 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create   procedure [dbo].[sp_student]
+(@id int=0,
+@name varchar(50)='',
+@rollno numeric(3,0)=0,
+@Address text='',
+@state varchar(50)='',
+@dob date='',
+@Flag varchar(50)=''
+)As
+
+BEGIN
+	IF @Flag='Insert'
+	BEGIN
+		INSERT INTO Student(Name,Rollno,Address,State,DOB) values(@name,@rollno,@Address,@state,@dob)
+	END
+	ELSE IF @Flag='Update'
+	BEGIN
+		update Student set Name=@name,Rollno=@rollno,Address=@Address,State=@state,DOB=@dob where ID=@id;
+	END
+	ELSE IF @Flag='Delete'
+	BEGIN
+		Delete from Student where ID=@Id;
+	END
+	ELSE IF @Flag='Select'
+	BEGIN
+		select * from Student where ID=@Id;
+	END
+	ELSE IF @Flag='Select_all'
+	BEGIN
+		select * from Student
+	END
+END
+GO
